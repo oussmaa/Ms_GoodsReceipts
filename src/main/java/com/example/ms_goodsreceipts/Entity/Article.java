@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
-public class Artticle {
+public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +19,10 @@ public class Artticle {
     private LocalDateTime creationDate;
     private String TypeArticle;
     private String Description;
+    private Double Price;
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Globalestock> stocks;
 
     @PrePersist
     public void prePersist() {
