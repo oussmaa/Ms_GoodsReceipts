@@ -1,6 +1,8 @@
 package com.example.ms_goodsreceipts.Controller;
 
+import com.example.ms_goodsreceipts.Entity.Article;
 import com.example.ms_goodsreceipts.Entity.Globalestock;
+import com.example.ms_goodsreceipts.Request.GlobaleRequest;
 import com.example.ms_goodsreceipts.service.GlobalesStockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,9 +32,8 @@ public class GlobalesStockController {
     }
 
     @PostMapping
-    public ResponseEntity<Globalestock> createGlobalestock(@RequestBody Globalestock globalestock) {
-        Globalestock createdGlobalestock = globalestockService.createGlobalestock(globalestock);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdGlobalestock);
+    public ResponseEntity<Article> createGlobalestock(@RequestBody GlobaleRequest globalestock) {
+        return  globalestockService.createGlobalestock(globalestock);
     }
 
     @PutMapping("/{id}")

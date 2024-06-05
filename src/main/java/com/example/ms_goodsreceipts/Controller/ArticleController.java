@@ -1,6 +1,7 @@
 package com.example.ms_goodsreceipts.Controller;
 
 import com.example.ms_goodsreceipts.Entity.Article;
+import com.example.ms_goodsreceipts.Request.ArticleRequest;
 import com.example.ms_goodsreceipts.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ public class ArticleController {
 
 
 
+
     @GetMapping
     public ResponseEntity<List<Article>> getAllArticles() {
         List<Article> articles = articleService.getAllArticles();
@@ -25,15 +27,25 @@ public class ArticleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Article> getArticleById(@PathVariable("id") Long id) {
-        Optional<Article> article = articleService.getArticleById(id);
-        return article.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ArticleRequest> getArticleById(@PathVariable("id") Long id) {
+        ArticleRequest article = articleService.getArticleById(id);
+        if (article != null) {
+            return ResponseEntity.ok(article);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
     public ResponseEntity<Article> createArticle(@RequestBody Article article) {
-        Article createdArticle = articleService.createArticle(article);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdArticle);
+        try {
+            Article createdArticle = articleService.createArticle(article);
+            return ResponseEntity.status(HttpStatus.OK).body(createdArticle);
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
     @PutMapping("/{id}")

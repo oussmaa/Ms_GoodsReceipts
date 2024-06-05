@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,7 @@ public class Article {
     private Double Price;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    private List<Globalestock> stocks;
+    private List<Globalestock> stocks  = new ArrayList<>();;
 
     @PrePersist
     public void prePersist() {

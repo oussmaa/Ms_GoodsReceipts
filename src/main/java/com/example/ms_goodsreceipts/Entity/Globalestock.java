@@ -18,6 +18,7 @@ public class Globalestock {
     @ManyToOne
     @JoinColumn(name = "article_id", nullable = false)
     private Article article;
+
     private Double OpeningQuantity;
 
     @OneToMany(mappedBy = "globalestock", cascade = CascadeType.ALL)
