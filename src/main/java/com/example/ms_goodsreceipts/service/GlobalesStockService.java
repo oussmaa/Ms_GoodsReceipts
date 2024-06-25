@@ -29,13 +29,12 @@ public class GlobalesStockService {
         return globalestockRepository.findById(id);
     }
 
-    public ResponseEntity<Article>  createGlobalestock(GlobaleRequest globaleRequest) {
+    public ResponseEntity<Globalestock>  createGlobalestock(GlobaleRequest globaleRequest) {
+
 
         Globalestock globalestock = new Globalestock();
-         globalestock.setOpeningQuantity(globaleRequest.getOpeningQuantity());
+        globalestock.setOpeningQuantity(globaleRequest.getOpeningQuantity());
         globalestock.setQuantityUsed(globaleRequest.getQuantityUsed());
-
-      //  return globalestockRepository.save(globalestock);*/
 
         Optional<Article> articleOptional = articleRepository.findById(globaleRequest.getArticleId());
         if (!articleOptional.isPresent()) {
@@ -45,9 +44,10 @@ public class GlobalesStockService {
         Article article = articleOptional.get();
         globalestock.setArticle(article);
         article.getStocks().add(globalestock);
-        articleRepository.save(article);
 
-        return ResponseEntity.ok(article);
+        globalestockRepository.save(globalestock); // Save Globalestock entity
+
+        return ResponseEntity.ok(globalestock);
     }
 
 

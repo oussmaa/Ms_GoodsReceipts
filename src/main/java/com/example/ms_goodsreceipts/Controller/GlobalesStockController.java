@@ -32,7 +32,7 @@ public class GlobalesStockController {
     }
 
     @PostMapping
-    public ResponseEntity<Article> createGlobalestock(@RequestBody GlobaleRequest globalestock) {
+    public ResponseEntity<Globalestock> createGlobalestock(@RequestBody GlobaleRequest globalestock) {
         return  globalestockService.createGlobalestock(globalestock);
     }
 

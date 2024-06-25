@@ -17,9 +17,6 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-
-
-
     @GetMapping
     public ResponseEntity<List<Article>> getAllArticles() {
         List<Article> articles = articleService.getAllArticles();

@@ -16,9 +16,6 @@ public class LocationAreaStockController {
     @Autowired
     private  LocationAreaStockService locationAreaStockService;
 
-
-
-
     @PostMapping
     public ResponseEntity<LocationAreaStock> createLocationAreaStock(@RequestBody LocationAreaStock locationAreaStock) {
         LocationAreaStock createdLocationAreaStock = locationAreaStockService.saveLocationAreaStock(locationAreaStock);

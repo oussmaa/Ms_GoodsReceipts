@@ -12,9 +12,9 @@ public class OrderStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long orderStockNb;
-    private String Description;
+     private String Description;
     private Double QuantityNeeded;
+    private String Articel;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id")

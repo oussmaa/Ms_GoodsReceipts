@@ -1,5 +1,6 @@
 package com.example.ms_goodsreceipts.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,7 +23,8 @@ public class Article {
     private String Description;
     private Double Price;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Globalestock> stocks  = new ArrayList<>();;
 
     @PrePersist
