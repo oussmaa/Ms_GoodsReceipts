@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,7 +24,11 @@ public class Globalestock {
     private Article article;
 
     private Double OpeningQuantity;
-
+    private LocalDateTime creationDate;
+    @PrePersist
+    public void prePersist() {
+        this.creationDate = LocalDateTime.now();
+    }
     @OneToMany(mappedBy = "globalestock", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<LocationAreaStock> locationAreaStocks;

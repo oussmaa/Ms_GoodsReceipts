@@ -3,6 +3,7 @@ package com.example.ms_goodsreceipts.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,10 @@ public class OrderStock {
 
     @OneToOne(mappedBy = "orderStock", cascade = CascadeType.ALL)
     private GoodsReceipt goodsReceipt;
-
+    private LocalDateTime creationDate;
+    @PrePersist
+    public void prePersist() {
+        this.creationDate = LocalDateTime.now();
+    }
 
 }

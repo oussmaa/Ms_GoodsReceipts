@@ -22,8 +22,12 @@ public class ArticleService {
 
     @Autowired
     public   GlobalesStockService globalesStockService;
-@Autowired
+
+    @Autowired
     public GlobalestockRepository globalestockRepository;
+
+  @Autowired
+    MouvementService mouvementService;
 
     public List<Article> getAllArticles() {
         return articleRepository.findAll();

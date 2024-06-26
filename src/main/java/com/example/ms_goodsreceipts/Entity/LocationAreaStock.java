@@ -1,4 +1,5 @@
 package com.example.ms_goodsreceipts.Entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,5 +22,15 @@ public class LocationAreaStock {
     @ManyToOne
     @JoinColumn(name = "globalestock_id")
     private Globalestock globalestock;
-    
+    private LocalDateTime creationDate;
+    @PrePersist
+    public void prePersist() {
+        this.creationDate = LocalDateTime.now();
+    }
+
+    @OneToOne
+    @JoinColumn(name = "goodsReceiptPos_id")
+    @JsonBackReference
+    private GoodsReceiptPos goodsReceiptPos;
+
 }

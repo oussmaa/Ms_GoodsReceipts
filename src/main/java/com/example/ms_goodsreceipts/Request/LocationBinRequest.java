@@ -3,8 +3,7 @@ package com.example.ms_goodsreceipts.Request;
 import lombok.Data;
 
 @Data
-public class LocationAreaRequest {
+public class LocationBinRequest {
 
-    private String location_area;
-
+    private String location_bin;
 }

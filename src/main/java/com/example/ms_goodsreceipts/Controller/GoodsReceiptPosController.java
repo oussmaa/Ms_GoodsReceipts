@@ -1,6 +1,7 @@
 package com.example.ms_goodsreceipts.Controller;
 
 import com.example.ms_goodsreceipts.Entity.GoodsReceiptPos;
+import com.example.ms_goodsreceipts.Request.GoodsReceiptPosRequest;
 import com.example.ms_goodsreceipts.service.GoodsReceiptPosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +16,10 @@ public class GoodsReceiptPosController {
     @Autowired
     private GoodsReceiptPosService goodsReceiptPosService;
 
-
-
     @PostMapping
-    public ResponseEntity<GoodsReceiptPos> createGoodsReceiptPos(@RequestBody GoodsReceiptPos goodsReceiptPos) {
-        GoodsReceiptPos createdGoodsReceiptPos = goodsReceiptPosService.saveGoodsReceiptPos(goodsReceiptPos);
-        return new ResponseEntity<>(createdGoodsReceiptPos, HttpStatus.CREATED);
+    public ResponseEntity<String> createGoodsReceiptPos(@RequestBody GoodsReceiptPosRequest GoodsReceiptPosRequest) {
+        String goodsReceiptPos = goodsReceiptPosService.createGoodsReceiptPos(GoodsReceiptPosRequest);
+        return new ResponseEntity<>(goodsReceiptPos, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

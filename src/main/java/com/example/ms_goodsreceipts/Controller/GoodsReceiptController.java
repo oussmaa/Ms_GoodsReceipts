@@ -1,6 +1,7 @@
 package com.example.ms_goodsreceipts.Controller;
 
 import com.example.ms_goodsreceipts.Entity.GoodsReceipt;
+import com.example.ms_goodsreceipts.Request.GoodsReceiptRequest;
 import com.example.ms_goodsreceipts.service.GoodsReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,20 +20,21 @@ public class GoodsReceiptController {
 
 
     @PostMapping
-    public ResponseEntity<GoodsReceipt> createGoodsReceipt(@RequestBody GoodsReceipt goodsReceipt) {
-        GoodsReceipt createdGoodsReceipt = goodsReceiptService.saveGoodsReceipt(goodsReceipt);
-        return new ResponseEntity<>(createdGoodsReceipt, HttpStatus.CREATED);
+    public ResponseEntity<String> createGoodsReceipt(@RequestBody GoodsReceiptRequest goodsReceiptRequest) {
+        String createdGoodsReceipt = goodsReceiptService.createGoodsReceipt(goodsReceiptRequest);
+            return new ResponseEntity<>(createdGoodsReceipt, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GoodsReceipt> getGoodsReceiptById(@PathVariable Long id) {
-        GoodsReceipt goodsReceipt = goodsReceiptService.getGoodsReceiptById(id);
+        GoodsReceipt goodsReceipt = goodsReceiptService.getGoodsReceipt(id);
         if (goodsReceipt != null) {
             return new ResponseEntity<>(goodsReceipt, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 
     @GetMapping
     public ResponseEntity<List<GoodsReceipt>> getAllGoodsReceipts() {
