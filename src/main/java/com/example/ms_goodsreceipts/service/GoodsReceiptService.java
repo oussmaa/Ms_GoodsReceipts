@@ -2,6 +2,7 @@ package com.example.ms_goodsreceipts.service;
 
 import com.example.ms_goodsreceipts.Entity.GoodsReceipt;
 import com.example.ms_goodsreceipts.Entity.GoodsReceiptPos;
+import com.example.ms_goodsreceipts.Entity.Mouvement;
 import com.example.ms_goodsreceipts.Entity.OrderStock;
 import com.example.ms_goodsreceipts.Exception.ResourceNotFoundException;
 import com.example.ms_goodsreceipts.Repository.GoodsReceiptPosRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GoodsReceiptService {
@@ -25,6 +27,8 @@ public class GoodsReceiptService {
 
     @Autowired
     private OrderStockRepository orderStockRepository;
+    @Autowired
+    private MouvementService mouvementService;
 
 
 
@@ -37,16 +41,26 @@ public class GoodsReceiptService {
                 .orElseThrow(() -> new ResourceNotFoundException("OrderStock not found for this id :: " + goodsReceiptCreateDTO.getOrderStockId()));
 
         GoodsReceipt goodsReceipt2=  goodsReceiptRepository.findGoodsReceiptByOrderStockID(goodsReceiptCreateDTO.getOrderStockId());
+
         if (goodsReceipt2 == null) {
             goodsReceipt.setOrderStock(orderStock);
+            goodsReceipt.setQuantityUsed(orderStock.getQuantityNeeded());
+            long idtr = goodsReceiptRepository.save(goodsReceipt).getId();
 
-             goodsReceiptRepository.save(goodsReceipt);
+            Mouvement mv = new Mouvement();
+            mv.setDescription("Save createGoodsReceipt entity");
+            mv.setMouvement("Save createGoodsReceipt entity");
+            mv.setIdtransaction(idtr);
+
+            mouvementService.SaveMouvement(mv);
+
              return  "Goods Receipt Is Created ";
         }
 
           return "the order is saved with another Goods Receipt";
 
     }
+
 
 
     @Transactional(readOnly = true)
@@ -57,7 +71,9 @@ public class GoodsReceiptService {
 
     @Transactional(readOnly = true)
     public List<GoodsReceipt> getAllGoodsReceipts() {
-        return goodsReceiptRepository.findAll();
+        return goodsReceiptRepository.findAll().stream()
+                .filter(goodsReceipt -> !"Close".equalsIgnoreCase(goodsReceipt.getStatus()))
+                .collect(Collectors.toList());
     }
 
     @Transactional

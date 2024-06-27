@@ -14,4 +14,9 @@ public interface GlobalestockRepository extends JpaRepository<Globalestock, Long
 
 @Query("select st from Globalestock st where st.article.id =:idarticle")
     List<Globalestock> findlistById(@Param("idarticle") Long idarticle);
+
+
+
+
+
 }

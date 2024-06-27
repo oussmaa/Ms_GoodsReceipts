@@ -2,6 +2,7 @@ package com.example.ms_goodsreceipts.service;
 
 import com.example.ms_goodsreceipts.Entity.Article;
 import com.example.ms_goodsreceipts.Entity.Globalestock;
+import com.example.ms_goodsreceipts.Entity.Mouvement;
 import com.example.ms_goodsreceipts.Repository.ArticleRepository;
 import com.example.ms_goodsreceipts.Repository.GlobalestockRepository;
 import com.example.ms_goodsreceipts.Request.GlobaleRequest;
@@ -19,6 +20,9 @@ public class GlobalesStockService {
 
     @Autowired
     private GlobalestockRepository globalestockRepository;
+
+    @Autowired
+    private MouvementService mouvementService;
 
 
     public List<Globalestock> getAllGlobalestocks() {
@@ -45,8 +49,14 @@ public class GlobalesStockService {
         globalestock.setArticle(article);
         article.getStocks().add(globalestock);
 
-        globalestockRepository.save(globalestock); // Save Globalestock entity
+        long idtr = globalestockRepository.save(globalestock).getId(); // Save Globalestock entity
 
+        Mouvement mv = new Mouvement();
+        mv.setDescription("Save Globalestock entity");
+        mv.setMouvement("Save Globalestock entity");
+        mv.setIdtransaction(idtr);
+
+        mouvementService.SaveMouvement(mv);
         return ResponseEntity.ok(globalestock);
     }
 

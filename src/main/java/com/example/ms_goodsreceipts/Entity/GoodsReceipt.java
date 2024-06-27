@@ -26,6 +26,10 @@ public class GoodsReceipt {
     public void prePersist() {
         this.creationDate = LocalDateTime.now();
     }
+
+    private String Status;
+    private Double QuantityUsed;
+
     @OneToOne
     @JoinColumn(name = "orderStock_id")
     @JsonBackReference

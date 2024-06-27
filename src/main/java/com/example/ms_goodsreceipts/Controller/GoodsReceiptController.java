@@ -17,8 +17,6 @@ public class GoodsReceiptController {
     private  GoodsReceiptService goodsReceiptService;
 
 
-
-
     @PostMapping
     public ResponseEntity<String> createGoodsReceipt(@RequestBody GoodsReceiptRequest goodsReceiptRequest) {
         String createdGoodsReceipt = goodsReceiptService.createGoodsReceipt(goodsReceiptRequest);

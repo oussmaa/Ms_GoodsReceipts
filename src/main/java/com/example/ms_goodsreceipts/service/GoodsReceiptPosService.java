@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GoodsReceiptPosService {
@@ -18,44 +19,75 @@ public class GoodsReceiptPosService {
     private   GoodsReceiptPosRepository goodsReceiptPosRepository;
 
     @Autowired
+    private   OrderStockRepository orderStockRepository;
+
+    @Autowired
+    private MouvementService mouvementService;
+
+    @Autowired
     private GoodsReceiptRepository goodsReceiptRepository;
 
     @Autowired
     private LocationAreaStockRepository locationAreaStockRepository;
 
-    @Autowired
-    private LocationBinStockRepository locationBinStockRepositoryl;
 
-    @Autowired
-    private LocationPlaceRepository locationPlaceRepository;
 
     @Transactional
     public String createGoodsReceiptPos(GoodsReceiptPosRequest goodsReceiptPosRequest) {
 
-        GoodsReceiptPos goodsReceiptpos = new GoodsReceiptPos();
-        goodsReceiptpos.setDescription(goodsReceiptPosRequest.getDescription());
-        goodsReceiptpos.setArticle(goodsReceiptPosRequest.getArticle());
-        goodsReceiptpos.setQuantityBooket(goodsReceiptPosRequest.getQuantityBooked());
+        // Create a new GoodsReceiptPos instance
+        GoodsReceiptPos goodsReceiptPos = new GoodsReceiptPos();
+        goodsReceiptPos.setDescription(goodsReceiptPosRequest.getDescription());
+        goodsReceiptPos.setArticle(goodsReceiptPosRequest.getArticle());
+        goodsReceiptPos.setQuantityBooket(goodsReceiptPosRequest.getQuantityBooked());
 
-
+        // Find the location area stock by area
         LocationAreaStock locationAreaStock = locationAreaStockRepository.findLocationAreaStockByArea(goodsReceiptPosRequest.getLocation_area());
 
         if (locationAreaStock != null) {
-            goodsReceiptpos.setLocationAreaStock(locationAreaStock);
+            // Set the location area stock to the goods receipt position
+            goodsReceiptPos.setLocationAreaStock(locationAreaStock);
+
+            // Find the goods receipt by ID
             GoodsReceipt goodsReceipt = goodsReceiptRepository.findById(goodsReceiptPosRequest.getIdgoodesreciept())
                     .orElseThrow(() -> new ResourceNotFoundException("Goods receipt not found for this id :: " + goodsReceiptPosRequest.getIdgoodesreciept()));
+            // Set the goods receipt to the goods receipt position
+            goodsReceiptPos.setGoodsReceipt(goodsReceipt);
 
-            goodsReceiptpos.setGoodsReceipt(goodsReceipt);
+            // Save the goods receipt position
+          long idtr =   goodsReceiptPosRepository.save(goodsReceiptPos).getId();
+            Mouvement mv = new Mouvement();
+            mv.setDescription("Save createGoodsReceiptPos entity");
+            mv.setMouvement("Save createGoodsReceiptPos entity");
+            mv.setIdtransaction(idtr);
 
-            goodsReceiptPosRepository.save(goodsReceiptpos);
+            mouvementService.SaveMouvement(mv);
+
+            CheckStatus(goodsReceipt.getId());
+
+
+
+        } else {
+            return "The location area does not exist.";
         }
-        else {
-            return "the Location doesn't Exist ";
-        }
-
 
         return "Save successful";
     }
+
+    public void CheckStatus(long idgoodesreciept)
+    {
+        Double countstock = goodsReceiptPosRepository.GetGoodsReceiptPosByIDGoodsReceip(idgoodesreciept);
+        GoodsReceipt goodsReceipt = goodsReceiptRepository.findById(idgoodesreciept).orElseThrow();
+
+        if (countstock.equals(goodsReceipt.getQuantityUsed()))
+        {
+            goodsReceipt.setStatus("Close");
+            goodsReceiptRepository.save(goodsReceipt);
+        }
+
+
+    }
+
 
 
     public GoodsReceiptPos saveGoodsReceiptPos(GoodsReceiptPos goodsReceiptPos) {

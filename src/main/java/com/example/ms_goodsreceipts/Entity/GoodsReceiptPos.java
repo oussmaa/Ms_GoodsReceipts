@@ -17,6 +17,7 @@ public class GoodsReceiptPos {
     private Long id;
 
     private Double QuantityBooket;
+
     private String Description;
     private String Article;
     private LocalDateTime creationDate;
@@ -24,13 +25,13 @@ public class GoodsReceiptPos {
     public void prePersist() {
         this.creationDate = LocalDateTime.now();
     }
+
     @ManyToOne
     @JoinColumn(name = "goodsreceipt_id")
     @JsonBackReference
     private GoodsReceipt goodsReceipt;
 
-    @OneToOne(mappedBy = "goodsReceiptPos", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @ManyToOne
     private LocationAreaStock locationAreaStock;
 
 

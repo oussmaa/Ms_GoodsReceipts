@@ -24,7 +24,9 @@ public class OrderStock {
 
     @OneToOne(mappedBy = "orderStock", cascade = CascadeType.ALL)
     private GoodsReceipt goodsReceipt;
+
     private LocalDateTime creationDate;
+
     @PrePersist
     public void prePersist() {
         this.creationDate = LocalDateTime.now();

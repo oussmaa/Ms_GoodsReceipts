@@ -28,9 +28,6 @@ public class LocationAreaStock {
         this.creationDate = LocalDateTime.now();
     }
 
-    @OneToOne
-    @JoinColumn(name = "goodsReceiptPos_id")
-    @JsonBackReference
-    private GoodsReceiptPos goodsReceiptPos;
+
 
 }

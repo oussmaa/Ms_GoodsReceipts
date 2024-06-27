@@ -1,5 +1,6 @@
 package com.example.ms_goodsreceipts.service;
 
+import com.example.ms_goodsreceipts.Entity.Mouvement;
 import com.example.ms_goodsreceipts.Entity.OrderStock;
 import com.example.ms_goodsreceipts.Entity.Supplier;
 import com.example.ms_goodsreceipts.Repository.OrderStockRepository;
@@ -17,6 +18,9 @@ import java.util.Optional;
 @Service
 public class OrderStockService {
 
+
+    @Autowired
+    private MouvementService mouvementService;
     @Autowired
     private OrderStockRepository orderStockRepository;
     @Autowired
@@ -43,7 +47,14 @@ public class OrderStockService {
         orderStock.setArticel(orderStockRequest.getArticel());
         orderStock.setSupplier(supplier);
 
-        orderStockRepository.save(orderStock);
+      long idtr = orderStockRepository.save(orderStock).getId();
+
+        Mouvement mv = new Mouvement();
+        mv.setDescription("Save createGoodsReceipt entity");
+        mv.setMouvement("Save createGoodsReceipt entity");
+        mv.setIdtransaction(idtr);
+
+        mouvementService.SaveMouvement(mv);
 
         return ResponseEntity.ok(orderStock);
     }
