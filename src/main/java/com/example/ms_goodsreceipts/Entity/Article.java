@@ -17,7 +17,9 @@ public class Article {
     private Long id;
 
 
+    @Column(unique = true, nullable = false)
     private String Articel;
+
     private LocalDateTime creationDate;
     private String TypeArticle;
     private String Description;

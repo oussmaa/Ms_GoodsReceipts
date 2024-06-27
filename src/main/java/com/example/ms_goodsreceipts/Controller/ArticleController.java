@@ -34,10 +34,10 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ResponseEntity<Article> createArticle(@RequestBody Article article) {
+    public ResponseEntity<String> createArticle(@RequestBody ArticleRequest articleRequest) {
         try {
-            Article createdArticle = articleService.createArticle(article);
-            return ResponseEntity.status(HttpStatus.OK).body(createdArticle);
+            return   articleService.createArticle(articleRequest);
+
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -48,7 +48,7 @@ public class ArticleController {
     @PutMapping("/{id}")
     public ResponseEntity<Article> updateArticle(
             @PathVariable("id") Long id,
-            @RequestBody Article updatedArticle
+            @RequestBody ArticleRequest updatedArticle
     ) {
         Article article = articleService.updateArticle(id, updatedArticle);
         if (article != null) {

@@ -7,9 +7,10 @@ import com.example.ms_goodsreceipts.Repository.GlobalestockRepository;
 import com.example.ms_goodsreceipts.Request.ArticleRequest;
 import com.example.ms_goodsreceipts.Request.GlobaleRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,9 +60,27 @@ public class ArticleService {
     }
 
 
-    public Article createArticle(Article article) {
+    public ResponseEntity<String> createArticle(ArticleRequest articleRequest) throws Exception {
+
         try {
-       return  articleRepository.save(article);
+
+             Optional<Article> existingArticle = articleRepository.findByArticel(articleRequest.getArticel());
+
+            if (existingArticle.isPresent()) {
+                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Article already exists");
+            }
+
+            else {
+
+                Article article = new Article();
+                article.setDescription(articleRequest.getDescription());
+                article.setPrice(articleRequest.getPrice());
+                article.setTypeArticle(articleRequest.getTypeArticle());
+                article.setArticel(articleRequest.getArticel());
+                articleRepository.save(article);
+                return ResponseEntity.status(HttpStatus.OK).body("Save successfully");
+
+            }
 
         }catch (Exception e){
             e.getCause();
@@ -69,7 +88,7 @@ public class ArticleService {
       return null;
     }
 
-    public Article updateArticle(Long id, Article updatedArticle) {
+    public Article updateArticle(Long id, ArticleRequest updatedArticle) {
         Optional<Article> existingArticleOptional = articleRepository.findById(id);
         if (existingArticleOptional.isPresent()) {
             Article existingArticle = existingArticleOptional.get();
