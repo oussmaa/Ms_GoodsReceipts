@@ -30,6 +30,9 @@ public class GoodsReceipt {
     private String Status;
     private Double QuantityUsed;
 
+    @Transient
+    private long orderStockId;
+
     @OneToOne
     @JoinColumn(name = "orderStock_id")
     @JsonBackReference

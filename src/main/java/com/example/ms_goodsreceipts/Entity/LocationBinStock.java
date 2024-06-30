@@ -1,6 +1,8 @@
 package com.example.ms_goodsreceipts.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,12 +25,15 @@ public class LocationBinStock {
     public void prePersist() {
         this.creationDate = LocalDateTime.now();
     }
+
     @ManyToOne
     @JoinColumn(name = "locationAreaStock_id", nullable = false)
+    @JsonBackReference
     private LocationAreaStock locationAreaStock;
 
 
     @OneToMany(mappedBy = "locationBinStock", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<LocationPlace> locationPlaces;
 
 

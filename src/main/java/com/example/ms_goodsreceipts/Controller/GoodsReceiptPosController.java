@@ -23,8 +23,8 @@ public class GoodsReceiptPosController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GoodsReceiptPos> getGoodsReceiptPosById(@PathVariable Long id) {
-        GoodsReceiptPos goodsReceiptPos = goodsReceiptPosService.getGoodsReceiptPosById(id);
+    public ResponseEntity<List<GoodsReceiptPos>> getGoodsReceiptPosById(@PathVariable Long id) {
+        List<GoodsReceiptPos> goodsReceiptPos = goodsReceiptPosService.getGoodsReceiptPosById(id);
         if (goodsReceiptPos != null) {
             return new ResponseEntity<>(goodsReceiptPos, HttpStatus.OK);
         } else {

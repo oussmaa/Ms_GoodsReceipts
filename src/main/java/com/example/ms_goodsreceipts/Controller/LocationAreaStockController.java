@@ -1,6 +1,7 @@
 package com.example.ms_goodsreceipts.Controller;
 
 import com.example.ms_goodsreceipts.Entity.LocationAreaStock;
+import com.example.ms_goodsreceipts.Request.LocationAreaRequest;
 import com.example.ms_goodsreceipts.service.LocationAreaStockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,8 @@ public class LocationAreaStockController {
     private  LocationAreaStockService locationAreaStockService;
 
     @PostMapping
-    public ResponseEntity<LocationAreaStock> createLocationAreaStock(@RequestBody LocationAreaStock locationAreaStock) {
-        LocationAreaStock createdLocationAreaStock = locationAreaStockService.saveLocationAreaStock(locationAreaStock);
+    public ResponseEntity<String> createLocationAreaStock(@RequestBody LocationAreaRequest locationAreaRequest) {
+        String createdLocationAreaStock = locationAreaStockService.saveLocationAreaStock(locationAreaRequest);
         return new ResponseEntity<>(createdLocationAreaStock, HttpStatus.CREATED);
     }
 

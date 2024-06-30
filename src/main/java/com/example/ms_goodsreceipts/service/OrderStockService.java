@@ -46,6 +46,7 @@ public class OrderStockService {
         orderStock.setQuantityNeeded(orderStockRequest.getQuantityNeeded());
         orderStock.setArticel(orderStockRequest.getArticel());
         orderStock.setSupplier(supplier);
+        orderStock.setDocumentOpenOrNot(false);
 
       long idtr = orderStockRepository.save(orderStock).getId();
 

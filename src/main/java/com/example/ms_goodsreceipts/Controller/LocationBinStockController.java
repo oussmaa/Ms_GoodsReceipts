@@ -1,6 +1,7 @@
 package com.example.ms_goodsreceipts.Controller;
 
 import com.example.ms_goodsreceipts.Entity.LocationBinStock;
+import com.example.ms_goodsreceipts.Request.LocationBinRequest;
 import com.example.ms_goodsreceipts.service.LocationBinStockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,15 +21,15 @@ public class LocationBinStockController {
         this.locationBinStockService = locationBinStockService;
     }
 
-    @PostMapping
-    public ResponseEntity<LocationBinStock> createLocationBinStock(@RequestBody LocationBinStock locationBinStock) {
-        LocationBinStock createdLocationBinStock = locationBinStockService.saveLocationBinStock(locationBinStock);
+    @PostMapping("/{id}")
+    public ResponseEntity<String> createLocationBinStock(@PathVariable Long id ,@RequestBody LocationBinRequest locationBinRequest) {
+        String createdLocationBinStock = locationBinStockService.saveLocationBinStock(id,locationBinRequest);
         return new ResponseEntity<>(createdLocationBinStock, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LocationBinStock> getLocationBinStockById(@PathVariable Long id) {
-        LocationBinStock locationBinStock = locationBinStockService.getLocationBinStockById(id);
+    public ResponseEntity<List<LocationBinStock>> getLocationBinStockById(@PathVariable Long id) {
+        List<LocationBinStock> locationBinStock = locationBinStockService.getLocationBinStockById(id);
         if (locationBinStock != null) {
             return new ResponseEntity<>(locationBinStock, HttpStatus.OK);
         } else {

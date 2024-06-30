@@ -12,4 +12,7 @@ public interface GoodsReceiptPosRepository extends JpaRepository<GoodsReceiptPos
 
      @Query("SELECT SUM(gd.QuantityBooket) FROM GoodsReceiptPos gd WHERE gd.goodsReceipt.id = :id")
      Double  GetGoodsReceiptPosByIDGoodsReceip(Long id);
+
+     @Query("select gp from GoodsReceiptPos gp where gp.goodsReceipt.id=:id")
+     List<GoodsReceiptPos> findlistPositionbyIdGoods(Long id);
 }

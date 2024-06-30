@@ -32,6 +32,12 @@ public class SupplierService {
             Supplier toUpdate = existingSupplier.get();
             toUpdate.setName(supplier.getName());
             toUpdate.setAddress(supplier.getAddress());
+            toUpdate.setCity(supplier.getCity());
+            toUpdate.setEmail(supplier.getEmail());
+            toUpdate.setCountry(supplier.getCountry());
+            toUpdate.setZip(supplier.getZip());
+            toUpdate.setState(supplier.getState());
+            toUpdate.setPhone(supplier.getPhone());
 
             return supplierRepository.save(toUpdate);
         } else {

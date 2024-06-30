@@ -38,7 +38,6 @@ public class GoodsReceiptPosService {
         // Create a new GoodsReceiptPos instance
         GoodsReceiptPos goodsReceiptPos = new GoodsReceiptPos();
         goodsReceiptPos.setDescription(goodsReceiptPosRequest.getDescription());
-        goodsReceiptPos.setArticle(goodsReceiptPosRequest.getArticle());
         goodsReceiptPos.setQuantityBooket(goodsReceiptPosRequest.getQuantityBooked());
 
         // Find the location area stock by area
@@ -53,6 +52,8 @@ public class GoodsReceiptPosService {
                     .orElseThrow(() -> new ResourceNotFoundException("Goods receipt not found for this id :: " + goodsReceiptPosRequest.getIdgoodesreciept()));
             // Set the goods receipt to the goods receipt position
             goodsReceiptPos.setGoodsReceipt(goodsReceipt);
+            OrderStock orderStock = orderStockRepository.findArticlebyorderofstock(goodsReceipt.getId());
+            goodsReceiptPos.setArticle(orderStock.getArticel());
 
             // Save the goods receipt position
           long idtr =   goodsReceiptPosRepository.save(goodsReceiptPos).getId();
@@ -79,7 +80,7 @@ public class GoodsReceiptPosService {
         Double countstock = goodsReceiptPosRepository.GetGoodsReceiptPosByIDGoodsReceip(idgoodesreciept);
         GoodsReceipt goodsReceipt = goodsReceiptRepository.findById(idgoodesreciept).orElseThrow();
 
-        if (countstock.equals(goodsReceipt.getQuantityUsed()))
+        if (countstock==goodsReceipt.getQuantityUsed())
         {
             goodsReceipt.setStatus("Close");
             goodsReceiptRepository.save(goodsReceipt);
@@ -94,8 +95,8 @@ public class GoodsReceiptPosService {
         return goodsReceiptPosRepository.save(goodsReceiptPos);
     }
 
-    public GoodsReceiptPos getGoodsReceiptPosById(Long id) {
-        return goodsReceiptPosRepository.findById(id).orElse(null);
+    public List<GoodsReceiptPos> getGoodsReceiptPosById(Long id) {
+        return goodsReceiptPosRepository.findlistPositionbyIdGoods(id);
     }
 
     public List<GoodsReceiptPos> getAllGoodsReceiptPos() {

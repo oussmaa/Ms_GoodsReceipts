@@ -72,7 +72,12 @@ public class GoodsReceiptService {
     @Transactional(readOnly = true)
     public List<GoodsReceipt> getAllGoodsReceipts() {
         return goodsReceiptRepository.findAll().stream()
-                .filter(goodsReceipt -> !"Close".equalsIgnoreCase(goodsReceipt.getStatus()))
+                .filter(gr -> !"Close".equalsIgnoreCase(gr.getStatus())) // Filter out goods receipts with status "Close"
+                .peek(gr -> {
+                    if (gr.getOrderStock() != null) {
+                        gr.setOrderStockId(gr.getOrderStock().getId()); // Set the orderStockId if orderStock is not null
+                    }
+                })
                 .collect(Collectors.toList());
     }
 

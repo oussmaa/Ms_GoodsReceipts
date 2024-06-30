@@ -26,7 +26,7 @@ public class OrderStock {
     private GoodsReceipt goodsReceipt;
 
     private LocalDateTime creationDate;
-
+    private Boolean documentOpenOrNot;
     @PrePersist
     public void prePersist() {
         this.creationDate = LocalDateTime.now();
