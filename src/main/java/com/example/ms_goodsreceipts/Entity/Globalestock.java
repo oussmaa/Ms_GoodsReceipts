@@ -25,10 +25,12 @@ public class Globalestock {
 
     private Double OpeningQuantity;
     private LocalDateTime creationDate;
+
     @PrePersist
     public void prePersist() {
         this.creationDate = LocalDateTime.now();
     }
+
     @OneToMany(mappedBy = "globalestock", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<LocationAreaStock> locationAreaStocks;
