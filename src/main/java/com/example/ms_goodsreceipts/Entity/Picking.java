@@ -18,8 +18,6 @@ public class Picking {
     private String name;
     private String description;
 
-    private Long IdOrder;
-
     public String Status;
 
     @OneToMany(mappedBy = "picking", cascade = CascadeType.ALL)

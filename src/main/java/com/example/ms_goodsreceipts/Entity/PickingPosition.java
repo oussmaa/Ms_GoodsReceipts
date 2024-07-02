@@ -19,6 +19,7 @@ public class PickingPosition {
     private Picking picking;
 
     public String Status;
+
     private Double Openquantity;
 
     private Double Bookedquantity;

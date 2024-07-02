@@ -2,8 +2,12 @@ package com.example.ms_goodsreceipts.service;
 
 import com.example.ms_goodsreceipts.Entity.OrderPosition;
 import com.example.ms_goodsreceipts.Entity.Orders;
+import com.example.ms_goodsreceipts.Entity.Picking;
+import com.example.ms_goodsreceipts.Entity.PickingPosition;
 import com.example.ms_goodsreceipts.Repository.OrderPositionRepository;
 import com.example.ms_goodsreceipts.Repository.OrdersRepository;
+import com.example.ms_goodsreceipts.Repository.PickingPositionRepository;
+import com.example.ms_goodsreceipts.Repository.PickingRepository;
 import com.example.ms_goodsreceipts.Request.OrderPositionRequest;
 import com.example.ms_goodsreceipts.Request.OrderRequest;
 import jakarta.transaction.Transactional;
@@ -18,6 +22,12 @@ public class OrderGenrateService {
     @Autowired
     public OrdersRepository  ordersRepository;
 
+    @Autowired
+    public PickingPositionRepository pickingPositionRepository;
+
+    @Autowired
+    public PickingRepository pickingRepository;
+
 
     @Autowired
     public OrderPositionRepository orderPositionRepository;
@@ -27,9 +37,53 @@ public class OrderGenrateService {
         Orders order = new Orders();
         order.setDescription(orderDto.getDescription());
         order.setStatus(orderDto.getStatus());
+        order.setGoPicking(false);
         return ordersRepository.save(order);
     }
 
+
+
+    @Transactional
+    public String generatepicking(Long orderId) {
+        try {
+
+            Orders order = ordersRepository.findById(orderId)
+                    .orElseThrow(() -> new RuntimeException("Order not found"));
+            if(order.getGoPicking()) {
+                return "Order Is Genrated to Picking";
+            }
+            else {
+
+            List<OrderPosition> orderPositions = orderPositionRepository.findorderpositionbyidorder(order.getId());
+
+            Picking picking = new Picking();
+            picking.setDescription(order.getDescription());
+            picking.setName("Picking For this Order: "+order.getId());
+            picking.setOrders(order);
+
+            Picking pickingsaved= pickingRepository.save(picking);
+
+            for (OrderPosition orderPosition : orderPositions) {
+                PickingPosition pickingPosition = new PickingPosition();
+                pickingPosition.setPicking(pickingsaved);
+                pickingPosition.setOpenquantity(orderPosition.getQuantity());
+                pickingPosition.setStatus("IN PROGRESS");
+                pickingPositionRepository.save(pickingPosition);
+
+            }
+            order.setGoPicking(true);
+            return "Picking Genrated successfully for this Order: "+order.getId();
+
+            }
+        }catch (Exception e)
+        {
+            return e.getMessage();
+        }
+
+
+
+
+    }
 
     @Transactional
     public OrderPosition addOrderPosition(OrderPositionRequest orderPositionDto) {
@@ -38,6 +92,10 @@ public class OrderGenrateService {
 
         OrderPosition position = new OrderPosition();
         position.setArticle(orderPositionDto.getArticle());
+        position.setDescription(orderPositionDto.getDescription());
+        position.setQuantity(orderPositionDto.getQuantity());
+        position.setLocationArea(orderPositionDto.getLocationarea());
+
         position.setOrders(order);
         return orderPositionRepository.save(position);
     }
@@ -58,6 +116,8 @@ public class OrderGenrateService {
                 .orElseThrow(() -> new RuntimeException("Order position not found"));
 
         position.setArticle(orderPositionDto.getArticle());
+        position.setDescription(orderPositionDto.getDescription());
+        position.setQuantity(orderPositionDto.getQuantity());
         return orderPositionRepository.save(position);
     }
 

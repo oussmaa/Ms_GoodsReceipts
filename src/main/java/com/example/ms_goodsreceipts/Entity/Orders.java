@@ -18,6 +18,8 @@ public class Orders {
 
     public String Status;
 
+    private Boolean GoPicking;
+
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderPosition> orderPositions;

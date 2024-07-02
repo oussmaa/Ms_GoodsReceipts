@@ -20,6 +20,12 @@ public class OrderPosition {
 
     public String Article;
 
+    public String Description;
+
+    private Double Quantity;
+
+    private String LocationArea;
+
 
 
 

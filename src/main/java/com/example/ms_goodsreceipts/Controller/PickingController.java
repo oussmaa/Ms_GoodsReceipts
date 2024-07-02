@@ -1,0 +1,37 @@
+package com.example.ms_goodsreceipts.Controller;
+
+import com.example.ms_goodsreceipts.Entity.OrderPosition;
+import com.example.ms_goodsreceipts.Entity.Orders;
+import com.example.ms_goodsreceipts.Entity.Picking;
+import com.example.ms_goodsreceipts.Entity.PickingPosition;
+import com.example.ms_goodsreceipts.service.PickingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/picking")
+public class PickingController {
+
+    @Autowired
+    private PickingService pickingService;
+
+
+
+    @GetMapping("/getallpositionbyid/{id}")
+    public ResponseEntity<List<PickingPosition>> getOrderPositionsByOrderId(@PathVariable Long id) {
+        List<PickingPosition> positions = pickingService.getpickingpositionbyid(id);
+        return ResponseEntity.ok(positions);
+    }
+    @GetMapping("/getallpicking")
+    public ResponseEntity<List<Picking>> getAllPicking() {
+        List<Picking> positions = pickingService.getAllPickings();
+        return ResponseEntity.ok(positions);
+    }
+
+}

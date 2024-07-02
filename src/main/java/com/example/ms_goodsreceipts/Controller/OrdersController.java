@@ -19,50 +19,59 @@ public class OrdersController {
         @Autowired
         private OrderGenrateService orderService;
 
-        @PostMapping
+        @PostMapping("/addorder")
         public ResponseEntity<Orders> addOrder(@RequestBody OrderRequest orderDto) {
             Orders order = orderService.addOrder(orderDto);
             return ResponseEntity.ok(order);
         }
 
-        @PostMapping("/position")
+    @PostMapping("/picking/genratepicking/{id}")
+    public ResponseEntity<String> generatepicking(@PathVariable Long id) {
+            String order = orderService.generatepicking(id);
+        return ResponseEntity.ok(order);
+    }
+
+
+        @PostMapping("/position/addposition")
         public ResponseEntity<OrderPosition> addOrderPosition(@RequestBody OrderPositionRequest orderPositionDto) {
             OrderPosition position = orderService.addOrderPosition(orderPositionDto);
             return ResponseEntity.ok(position);
         }
 
-        @PutMapping
+        @PutMapping("/updateorder")
         public ResponseEntity<Orders> updateOrder(@RequestBody OrderRequest orderDto) {
             Orders order = orderService.updateOrder(orderDto);
             return ResponseEntity.ok(order);
         }
 
-        @PutMapping("/position")
+        @PutMapping("/position/updateposition")
         public ResponseEntity<OrderPosition> updateOrderPosition(@RequestBody OrderPositionRequest orderPositionDto) {
             OrderPosition position = orderService.updateOrderPosition(orderPositionDto);
             return ResponseEntity.ok(position);
         }
 
-        @DeleteMapping("/{id}")
+        @DeleteMapping("/deleteorder/{id}")
         public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
             orderService.deleteOrder(id);
             return ResponseEntity.noContent().build();
         }
 
-        @DeleteMapping("/position/{id}")
+        @DeleteMapping("/position/deleteposition/{id}")
         public ResponseEntity<Void> deleteOrderPosition(@PathVariable Long id) {
             orderService.deleteOrderPosition(id);
             return ResponseEntity.noContent().build();
         }
 
-    @GetMapping("/{id}/positions")
+    @GetMapping("/positions/getallpositionbyorder/{id}")
     public ResponseEntity<List<OrderPosition>> getOrderPositionsByOrderId(@PathVariable Long id) {
         List<OrderPosition> positions = orderService.GetallPosition(id);
         return ResponseEntity.ok(positions);
     }
-    @GetMapping
+    @GetMapping("/getallorder")
     public ResponseEntity<List<Orders>> getallorder() {
         List<Orders> positions = orderService.GetallOrder();
         return ResponseEntity.ok(positions);
     }
+
+
     }
