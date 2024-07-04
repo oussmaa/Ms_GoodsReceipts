@@ -24,6 +24,8 @@ public class PickingPosition {
 
     private Double Bookedquantity;
 
+    private String LocationArea;
+
 
     @ManyToOne
     @JoinColumn(name = "shipment_id")

@@ -36,7 +36,7 @@ public class OrderGenrateService {
     public Orders addOrder(OrderRequest orderDto) {
         Orders order = new Orders();
         order.setDescription(orderDto.getDescription());
-        order.setStatus(orderDto.getStatus());
+        order.setStatus("INPROGRESS");
         order.setGoPicking(false);
         return ordersRepository.save(order);
     }
@@ -67,7 +67,8 @@ public class OrderGenrateService {
                 PickingPosition pickingPosition = new PickingPosition();
                 pickingPosition.setPicking(pickingsaved);
                 pickingPosition.setOpenquantity(orderPosition.getQuantity());
-                pickingPosition.setStatus("IN PROGRESS");
+                pickingPosition.setStatus("INPROGRESS");
+                pickingPosition.setLocationArea(orderPosition.getLocationArea());
                 pickingPositionRepository.save(pickingPosition);
 
             }
@@ -79,8 +80,6 @@ public class OrderGenrateService {
         {
             return e.getMessage();
         }
-
-
 
 
     }

@@ -21,7 +21,7 @@ public class PickingService {
 
     @Transactional
     public List<Picking> getAllPickings() {
-        return pickingRepository.findAll();
+        return pickingRepository.findpickingBySatus("INPROGRESS");
     }
 
     @Transactional

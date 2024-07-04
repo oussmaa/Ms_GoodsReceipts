@@ -10,8 +10,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PickingRepository extends JpaRepository<Picking, Integer> {
+public interface PickingRepository extends JpaRepository<Picking, Long> {
 
-
+    @Query("select lk from  Picking lk where  lk.Status=:status")
+    List<Picking> findpickingBySatus(String status);
 
 }
