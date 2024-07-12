@@ -30,6 +30,9 @@ public class GoodsReceiptPosService {
     @Autowired
     private LocationAreaStockRepository locationAreaStockRepository;
 
+    @Autowired
+    private ManageAndSaveStock manageAndSaveStock;
+
 
 
     @Transactional
@@ -56,13 +59,16 @@ public class GoodsReceiptPosService {
             goodsReceiptPos.setArticle(orderStock.getArticel());
 
             // Save the goods receipt position
-          long idtr =   goodsReceiptPosRepository.save(goodsReceiptPos).getId();
+            long idtr =   goodsReceiptPosRepository.save(goodsReceiptPos).getId();
+
             Mouvement mv = new Mouvement();
             mv.setDescription("Save createGoodsReceiptPos entity");
             mv.setMouvement("Save createGoodsReceiptPos entity");
             mv.setIdtransaction(idtr);
 
             mouvementService.SaveMouvement(mv);
+
+            manageAndSaveStock.saveStock(locationAreaStock.getArea(),"","",goodsReceiptPosRequest.getQuantityBooked(),orderStock.getArticel());
 
             CheckStatus(goodsReceipt.getId());
 

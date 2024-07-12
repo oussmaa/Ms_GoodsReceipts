@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/globalestocks")
+@CrossOrigin(origins = "http://localhost:3000")
 public class GlobalesStockController {
 
     @Autowired
@@ -23,6 +24,12 @@ public class GlobalesStockController {
     public ResponseEntity<List<Globalestock>> getAllGlobalestocks() {
         List<Globalestock> globalestocks = globalestockService.getAllGlobalestocks();
         return ResponseEntity.ok(globalestocks);
+    }
+
+    @GetMapping("/GetStockByLocation/{loc}")
+    public ResponseEntity<List<GlobaleRequest>> getGlobalestockBylocation(@PathVariable("loc") String location) {
+        List<GlobaleRequest> globalestock = globalestockService.getGlobalestockByLocation(location);
+        return new ResponseEntity(globalestock, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

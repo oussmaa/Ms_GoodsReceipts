@@ -47,7 +47,6 @@ public class ArticleService {
             List<Globalestock> globalestock = globalestockRepository.findlistById(articleRequest.getId());
             List<GlobaleRequest> globaleRequests = globalestock.stream().map(st -> {
                 GlobaleRequest g = new GlobaleRequest();
-                g.setQuantityUsed(st.getQuantityUsed());
                 g.setOpeningQuantity(st.getOpeningQuantity()); // Corrected to get OpeningQuantity
                 return g;
             }).collect(Collectors.toList());

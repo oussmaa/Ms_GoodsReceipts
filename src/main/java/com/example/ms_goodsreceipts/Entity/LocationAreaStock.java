@@ -22,17 +22,14 @@ public class LocationAreaStock {
     @JsonManagedReference
     private List<LocationBinStock> locationBinStocks;
 
-    @ManyToOne
-    @JoinColumn(name = "globalestock_id")
-    @JsonIgnore
-    private Globalestock globalestock;
-
     private LocalDateTime creationDate;
     @PrePersist
     public void prePersist() {
         this.creationDate = LocalDateTime.now();
     }
 
-
+    @OneToMany(mappedBy = "locationAreaStock", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Globalestock> globalestocks;
 
 }

@@ -16,11 +16,10 @@ import java.util.List;
 public class GlobaleRequest {
 
     private Double QuantityUsed;
-
-
+    private Article article;
     private Long articleId;
     private Double OpeningQuantity;
-
+    public LocationAreaStock locationAreaStock;
     private List<LocationAreaRequest> locationAreaRequests  = new ArrayList<>();
 
 

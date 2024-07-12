@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/goodsReceiptPos")
+@CrossOrigin(origins = "http://localhost:3000")
 public class GoodsReceiptPosController {
     @Autowired
     private GoodsReceiptPosService goodsReceiptPosService;

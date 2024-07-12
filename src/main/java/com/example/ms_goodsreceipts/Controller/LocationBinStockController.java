@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/locationBinStocks")
+@CrossOrigin(origins = "http://localhost:3000")
 public class LocationBinStockController {
 
     private final LocationBinStockService locationBinStockService;

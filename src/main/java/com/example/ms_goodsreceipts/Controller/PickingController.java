@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/picking")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PickingController {
 
     @Autowired
