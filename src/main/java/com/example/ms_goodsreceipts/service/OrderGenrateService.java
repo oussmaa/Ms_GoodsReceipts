@@ -94,7 +94,6 @@ public class OrderGenrateService {
         position.setDescription(orderPositionDto.getDescription());
         position.setQuantity(orderPositionDto.getQuantity());
         position.setLocationArea(orderPositionDto.getLocationarea());
-
         position.setOrders(order);
         return orderPositionRepository.save(position);
     }

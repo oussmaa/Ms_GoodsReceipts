@@ -31,6 +31,13 @@ public class GoodsReceiptPosService {
     private LocationAreaStockRepository locationAreaStockRepository;
 
     @Autowired
+    private LocationBinStockRepository locationBinStockRepository;
+
+    @Autowired
+    private LocationPlaceRepository locationPlaceRepository;
+
+
+    @Autowired
     private ManageAndSaveStock manageAndSaveStock;
 
 
@@ -48,7 +55,12 @@ public class GoodsReceiptPosService {
 
         if (locationAreaStock != null) {
             // Set the location area stock to the goods receipt position
-            goodsReceiptPos.setLocationAreaStock(locationAreaStock);
+            goodsReceiptPos.setLocationAreaStock(goodsReceiptPosRequest.getLocation_area());
+
+            goodsReceiptPos.setLocationBinStock(goodsReceiptPosRequest.getLocation_bin());
+
+
+            goodsReceiptPos.setLocationPlace(goodsReceiptPosRequest.getLocation_place());
 
             // Find the goods receipt by ID
             GoodsReceipt goodsReceipt = goodsReceiptRepository.findById(goodsReceiptPosRequest.getIdgoodesreciept())

@@ -5,9 +5,11 @@ import lombok.Data;
 @Data
 public class GoodsReceiptPosRequest {
 
-    private Long idgoodesreciept;
+    private Long  idgoodesreciept;
     private Double quantityBooked;
     private String description;
     private String article;
     private String location_area;
+    private String location_bin;
+    private String location_place;
 }
