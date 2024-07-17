@@ -31,8 +31,13 @@ public class GoodsReceiptPos {
     @JsonBackReference
     private GoodsReceipt goodsReceipt;
 
-    @ManyToOne
-    private LocationAreaStock locationAreaStock;
+
+    private String locationAreaStock;
+
+
+    private String locationBinStock;
+
+    private String locationPlace;
 
 
 }

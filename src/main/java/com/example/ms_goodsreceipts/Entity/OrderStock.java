@@ -13,9 +13,9 @@ public class OrderStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-     private String Description;
-    private Double QuantityNeeded;
-    private String Articel;
+     private String description;
+    private Double quantityNeeded;
+    private String articel;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id")
