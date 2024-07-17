@@ -16,7 +16,7 @@ public class GoodsReceiptPos {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double QuantityBooket;
+    private Double QuantityBooked;
 
     private String Description;
     private String Article;
@@ -32,12 +32,12 @@ public class GoodsReceiptPos {
     private GoodsReceipt goodsReceipt;
 
 
-    private String locationAreaStock;
+    private String location_area;
 
 
-    private String locationBinStock;
+    private String location_bin;
 
-    private String locationPlace;
+    private String location_place;
 
 
 }

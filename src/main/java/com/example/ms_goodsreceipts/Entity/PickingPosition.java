@@ -25,6 +25,8 @@ public class PickingPosition {
     private Double Bookedquantity;
 
     private String LocationArea;
+    private String LocationBin;
+    private String LocationPlace;
 
 
     @ManyToOne

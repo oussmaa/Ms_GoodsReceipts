@@ -15,4 +15,6 @@ public interface PickingRepository extends JpaRepository<Picking, Long> {
     @Query("select lk from  Picking lk where  lk.Status=:status")
     List<Picking> findpickingBySatus(String status);
 
+
+
 }

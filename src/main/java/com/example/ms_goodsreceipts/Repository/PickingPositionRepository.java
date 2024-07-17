@@ -17,5 +17,8 @@ public interface PickingPositionRepository extends JpaRepository<PickingPosition
     @Query("select lk from  PickingPosition lk where  lk.Status=:status")
     List<PickingPosition> findpickingByPositionSatus(String status);
 
+    @Query("select lk from  PickingPosition lk where  lk.Status=:status and lk.picking.id =:id")
+    List<PickingPosition> findpickingByPositionSatusAndId(String status,Long id);
+
 
 }

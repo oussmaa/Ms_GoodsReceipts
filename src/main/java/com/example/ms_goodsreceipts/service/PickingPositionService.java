@@ -21,47 +21,60 @@ public class PickingPositionService {
     @Autowired
      PickingRepository pickingRepository;
 
-
+public List<PickingPosition> GetALLPositionById(long id)
+{
+    return pickingPositionRepository.findpickingByPosition(id);
+}
     public ResponseEntity<String> bookPosition(Long id, Double quantityBooked) {
         try {
             // Find the picking position by id
             PickingPosition pickingPosition = pickingPositionRepository.findById(id)
                     .orElseThrow(() -> new Exception("Position not found"));
 
+
             // Check if the open quantity is less than the quantity booked
-            if (pickingPosition.getOpenquantity() < quantityBooked) {
+            if (pickingPosition.getOpenquantity() < quantityBooked+pickingPosition.getBookedquantity()) {
                 return new ResponseEntity<>("The Quantity Booked is more than the Open Quantity", HttpStatus.BAD_REQUEST);
             }
-            else if (pickingPosition.getOpenquantity() >= quantityBooked)
+            else if (pickingPosition.getOpenquantity() > quantityBooked+pickingPosition.getBookedquantity())
             {
                 pickingPosition.setBookedquantity(pickingPosition.getBookedquantity()+quantityBooked);
                 pickingPositionRepository.save(pickingPosition);
                 return new ResponseEntity<>("The Quantity Booked ", HttpStatus.OK);
+
             }
 
-            else if(pickingPosition.getOpenquantity() == quantityBooked) {
-
+            else if(pickingPosition.getOpenquantity() == quantityBooked+pickingPosition.getBookedquantity()) {
+                pickingPosition.setBookedquantity(pickingPosition.getBookedquantity()+quantityBooked);
                 pickingPosition.setStatus("BOOKED");
                 pickingPositionRepository.save(pickingPosition);
+                checkposition(pickingPosition.getPicking().getId());
+
                 return new ResponseEntity<>("The Position is Closed", HttpStatus.OK);
             }
         } catch (Exception e) {
             // Return the error message
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        checkposition(id);
+
         return null;
     }
 
     public void checkposition(Long id)
-    {
+    { boolean Closed =true;
 try {
 
-    List<PickingPosition> list = pickingPositionRepository.findpickingByPositionSatus("BOOKED");
+    List<PickingPosition> list = pickingPositionRepository.findpickingByPosition(id);
+    for (PickingPosition position : list) {
+        if (!position.getStatus().equals("BOOKED")) {
+            Closed= false;
+            break;
+        }
+    }
 
-    if(list.isEmpty())
+    if(Closed)
     {
-        Picking picking =pickingRepository.findById(list.get(0).getPicking().getId()).orElseThrow();
+        Picking picking =pickingRepository.findById(id).orElseThrow();
         picking.setStatus("Closed");
         pickingRepository.save(picking);
     }
@@ -69,7 +82,7 @@ try {
 
 }catch (Exception e)
 {
-    e.printStackTrace();
+    e.getMessage().toString();
 }
 
 

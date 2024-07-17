@@ -59,7 +59,9 @@ public class OrderGenrateService {
             Picking picking = new Picking();
             picking.setDescription(order.getDescription());
             picking.setName("Picking For this Order: "+order.getId());
+            picking.setName("INPROGRESS");
             picking.setOrders(order);
+
 
             Picking pickingsaved= pickingRepository.save(picking);
 
@@ -69,6 +71,9 @@ public class OrderGenrateService {
                 pickingPosition.setOpenquantity(orderPosition.getQuantity());
                 pickingPosition.setStatus("INPROGRESS");
                 pickingPosition.setLocationArea(orderPosition.getLocationArea());
+                pickingPosition.setLocationBin(orderPosition.getLocationBin());
+                pickingPosition.setLocationPlace(orderPosition.getLocationPlace());
+                pickingPosition.setBookedquantity(0.0);
                 pickingPositionRepository.save(pickingPosition);
 
             }

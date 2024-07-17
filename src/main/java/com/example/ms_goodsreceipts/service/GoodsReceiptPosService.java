@@ -48,23 +48,23 @@ public class GoodsReceiptPosService {
         // Create a new GoodsReceiptPos instance
         GoodsReceiptPos goodsReceiptPos = new GoodsReceiptPos();
         goodsReceiptPos.setDescription(goodsReceiptPosRequest.getDescription());
-        goodsReceiptPos.setQuantityBooket(goodsReceiptPosRequest.getQuantityBooked());
+        goodsReceiptPos.setQuantityBooked(goodsReceiptPosRequest.getQuantityBooked());
 
         // Find the location area stock by area
         LocationAreaStock locationAreaStock = locationAreaStockRepository.findLocationAreaStockByArea(goodsReceiptPosRequest.getLocation_area());
 
         if (locationAreaStock != null) {
             // Set the location area stock to the goods receipt position
-            goodsReceiptPos.setLocationAreaStock(goodsReceiptPosRequest.getLocation_area());
+            goodsReceiptPos.setLocation_area(goodsReceiptPosRequest.getLocation_area());
 
-            goodsReceiptPos.setLocationBinStock(goodsReceiptPosRequest.getLocation_bin());
+            goodsReceiptPos.setLocation_bin(goodsReceiptPosRequest.getLocation_bin());
 
 
-            goodsReceiptPos.setLocationPlace(goodsReceiptPosRequest.getLocation_place());
+            goodsReceiptPos.setLocation_place(goodsReceiptPosRequest.getLocation_place());
 
             // Find the goods receipt by ID
-            GoodsReceipt goodsReceipt = goodsReceiptRepository.findById(goodsReceiptPosRequest.getIdgoodesreciept())
-                    .orElseThrow(() -> new ResourceNotFoundException("Goods receipt not found for this id :: " + goodsReceiptPosRequest.getIdgoodesreciept()));
+            GoodsReceipt goodsReceipt = goodsReceiptRepository.findById(goodsReceiptPosRequest.getGoodsReceiptid())
+                    .orElseThrow(() -> new ResourceNotFoundException("Goods receipt not found for this id :: " + goodsReceiptPosRequest.getGoodsReceiptid() ));
             // Set the goods receipt to the goods receipt position
             goodsReceiptPos.setGoodsReceipt(goodsReceipt);
             OrderStock orderStock = orderStockRepository.findArticlebyorderofstock(goodsReceipt.getId());

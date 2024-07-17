@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class GoodsReceiptPosRequest {
 
-    private Long  idgoodesreciept;
+    private Long  goodsReceiptid;
     private Double quantityBooked;
     private String description;
     private String article;
