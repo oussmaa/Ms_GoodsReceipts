@@ -26,8 +26,8 @@ public class OrderPosition {
 
     private String LocationArea;
 
-
-
+    private String LocationBin;
+    private String LocationPlace;
 
 
 

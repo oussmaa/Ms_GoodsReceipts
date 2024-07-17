@@ -90,11 +90,12 @@ public class OrderGenrateService {
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
         OrderPosition position = new OrderPosition();
-        position.setArticle(orderPositionDto.getArticle());
+        position.setArticle(orderPositionDto.getArticel());
         position.setDescription(orderPositionDto.getDescription());
         position.setQuantity(orderPositionDto.getQuantity());
-        position.setLocationArea(orderPositionDto.getLocationarea());
-
+        position.setLocationArea(orderPositionDto.getLocationArea());
+        position.setLocationBin(orderPositionDto.getLocationBin());
+        position.setLocationPlace(orderPositionDto.getLocationPlace());
         position.setOrders(order);
         return orderPositionRepository.save(position);
     }
@@ -114,7 +115,7 @@ public class OrderGenrateService {
         OrderPosition position = orderPositionRepository.findById(orderPositionDto.getId())
                 .orElseThrow(() -> new RuntimeException("Order position not found"));
 
-        position.setArticle(orderPositionDto.getArticle());
+        position.setArticle(orderPositionDto.getArticel());
         position.setDescription(orderPositionDto.getDescription());
         position.setQuantity(orderPositionDto.getQuantity());
         return orderPositionRepository.save(position);
