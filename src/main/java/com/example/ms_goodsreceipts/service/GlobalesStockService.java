@@ -45,8 +45,7 @@ public class GlobalesStockService {
             GlobaleRequest globaleRequest = new GlobaleRequest();
             globaleRequest.setOpeningQuantity(item.getOpeningQuantity());
             globaleRequest.setArticle(item.getArticle());
-            globaleRequest.setLocationAreaStock(item.getLocationAreaStock());
-            globaleRequestList.add(globaleRequest);
+             globaleRequestList.add(globaleRequest);
         }
         return globaleRequestList;
     }

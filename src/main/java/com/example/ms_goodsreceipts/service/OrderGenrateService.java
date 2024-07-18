@@ -59,7 +59,8 @@ public class OrderGenrateService {
             Picking picking = new Picking();
             picking.setDescription(order.getDescription());
             picking.setName("Picking For this Order: "+order.getId());
-            picking.setName("INPROGRESS");
+            picking.setName(order.getDescription());
+            picking.setStatus("INPROGRESS");
             picking.setOrders(order);
 
 
@@ -74,7 +75,10 @@ public class OrderGenrateService {
                 pickingPosition.setLocationBin(orderPosition.getLocationBin());
                 pickingPosition.setLocationPlace(orderPosition.getLocationPlace());
                 pickingPosition.setBookedquantity(0.0);
+                pickingPosition.setArticle(orderPosition.getArticle());
                 pickingPositionRepository.save(pickingPosition);
+
+
 
             }
             order.setGoPicking(true);
@@ -101,6 +105,7 @@ public class OrderGenrateService {
         position.setLocationArea(orderPositionDto.getLocationArea());
         position.setLocationBin(orderPositionDto.getLocationBin());
         position.setLocationPlace(orderPositionDto.getLocationPlace());
+        position.setArticle(orderPositionDto.getArticel());
         position.setOrders(order);
         return orderPositionRepository.save(position);
     }

@@ -28,8 +28,7 @@ public class ManageAndSaveStock {
             LocationAreaStock loc = locationAreaStockRepository.findLocationAreaStockByArea(locationArea);
             Article art = articleRepository.findByArticel(article).orElseThrow();
             Globalestock globalestock = new Globalestock();
-            globalestock.setLocationAreaStock(loc);
-            globalestock.setOpeningQuantity(quantity);
+             globalestock.setOpeningQuantity(quantity);
             globalestock.setArticle(art);
             globalestockRepository.save(globalestock);
 

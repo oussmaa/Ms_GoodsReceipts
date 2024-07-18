@@ -25,6 +25,7 @@ public class Globalestock {
     private Article article;
 
     private Double OpeningQuantity;
+
     private LocalDateTime creationDate;
 
     @PrePersist
@@ -32,8 +33,7 @@ public class Globalestock {
         this.creationDate = LocalDateTime.now();
     }
 
-    @ManyToOne
-    @JoinColumn(name = "locationAreaStock_id")
-    @JsonBackReference
-    private LocationAreaStock locationAreaStock;
+    private String LocationArea;
+    private String LocationBin;
+    private String LocationPlace;
 }

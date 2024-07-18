@@ -1,7 +1,10 @@
 package com.example.ms_goodsreceipts.service;
 
+import com.example.ms_goodsreceipts.Entity.Globalestock;
 import com.example.ms_goodsreceipts.Entity.Picking;
 import com.example.ms_goodsreceipts.Entity.PickingPosition;
+import com.example.ms_goodsreceipts.Repository.ArticleRepository;
+import com.example.ms_goodsreceipts.Repository.GlobalestockRepository;
 import com.example.ms_goodsreceipts.Repository.PickingPositionRepository;
 import com.example.ms_goodsreceipts.Repository.PickingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,12 @@ public class PickingPositionService {
     @Autowired
      PickingRepository pickingRepository;
 
+    @Autowired
+    private GlobalestockRepository globalestockRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
+
 public List<PickingPosition> GetALLPositionById(long id)
 {
     return pickingPositionRepository.findpickingByPosition(id);
@@ -31,23 +40,41 @@ public List<PickingPosition> GetALLPositionById(long id)
             PickingPosition pickingPosition = pickingPositionRepository.findById(id)
                     .orElseThrow(() -> new Exception("Position not found"));
 
-
             // Check if the open quantity is less than the quantity booked
             if (pickingPosition.getOpenquantity() < quantityBooked+pickingPosition.getBookedquantity()) {
                 return new ResponseEntity<>("The Quantity Booked is more than the Open Quantity", HttpStatus.BAD_REQUEST);
             }
+
             else if (pickingPosition.getOpenquantity() > quantityBooked+pickingPosition.getBookedquantity())
             {
                 pickingPosition.setBookedquantity(pickingPosition.getBookedquantity()+quantityBooked);
+
                 pickingPositionRepository.save(pickingPosition);
+                Globalestock globalestock = new Globalestock();
+                Globalestock globalestock1=  globalestockRepository.findlistStockByLocationAndArticle(pickingPosition.getLocationArea(),pickingPosition.getLocationBin(),pickingPosition.getLocationPlace(),pickingPosition.getArticle());
+
+                if (globalestock1 != null) {
+                    globalestock.setOpeningQuantity(globalestock1.getOpeningQuantity()-quantityBooked);
+                    globalestockRepository.save(globalestock);
+                }
                 return new ResponseEntity<>("The Quantity Booked ", HttpStatus.OK);
 
             }
 
             else if(pickingPosition.getOpenquantity() == quantityBooked+pickingPosition.getBookedquantity()) {
+
                 pickingPosition.setBookedquantity(pickingPosition.getBookedquantity()+quantityBooked);
                 pickingPosition.setStatus("BOOKED");
                 pickingPositionRepository.save(pickingPosition);
+
+
+                Globalestock globalestock1=  globalestockRepository.findlistStockByLocationAndArticle(pickingPosition.getLocationArea(),pickingPosition.getLocationBin(),pickingPosition.getLocationPlace(),pickingPosition.getArticle());
+
+                if (globalestock1 != null) {
+                    globalestock1.setOpeningQuantity(globalestock1.getOpeningQuantity()-quantityBooked);
+                    globalestockRepository.save(globalestock1);
+                }
+
                 checkposition(pickingPosition.getPicking().getId());
 
                 return new ResponseEntity<>("The Position is Closed", HttpStatus.OK);

@@ -28,8 +28,6 @@ public class LocationAreaStock {
         this.creationDate = LocalDateTime.now();
     }
 
-    @OneToMany(mappedBy = "locationAreaStock", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Globalestock> globalestocks;
+
 
 }

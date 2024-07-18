@@ -28,6 +28,7 @@ public class PickingPosition {
     private String LocationBin;
     private String LocationPlace;
 
+    private String Article;
 
     @ManyToOne
     @JoinColumn(name = "shipment_id")

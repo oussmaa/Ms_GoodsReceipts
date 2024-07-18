@@ -15,11 +15,15 @@ import java.util.Optional;
 
 @Service
 public class GoodsReceiptPosService {
-    @Autowired
-    private   GoodsReceiptPosRepository goodsReceiptPosRepository;
 
     @Autowired
-    private   OrderStockRepository orderStockRepository;
+    private GoodsReceiptPosRepository goodsReceiptPosRepository;
+
+    @Autowired
+    private GlobalestockRepository globalestockRepository;
+
+    @Autowired
+    private OrderStockRepository orderStockRepository;
 
     @Autowired
     private MouvementService mouvementService;
@@ -31,15 +35,10 @@ public class GoodsReceiptPosService {
     private LocationAreaStockRepository locationAreaStockRepository;
 
     @Autowired
-    private LocationBinStockRepository locationBinStockRepository;
-
-    @Autowired
-    private LocationPlaceRepository locationPlaceRepository;
-
-
-    @Autowired
     private ManageAndSaveStock manageAndSaveStock;
 
+    @Autowired
+    private ArticleRepository articleRepository;
 
 
     @Transactional
@@ -73,14 +72,30 @@ public class GoodsReceiptPosService {
             // Save the goods receipt position
             long idtr =   goodsReceiptPosRepository.save(goodsReceiptPos).getId();
 
+            Globalestock globalestock = new Globalestock();
+            globalestock.setArticle(articleRepository.findByArticel(goodsReceiptPos.getArticle()).orElseThrow());
+            globalestock.setLocationArea(goodsReceiptPosRequest.getLocation_area());
+            globalestock.setLocationBin(goodsReceiptPosRequest.getLocation_bin());
+            globalestock.setLocationPlace(goodsReceiptPosRequest.getLocation_place());
+
+            Globalestock globalestock1=  globalestockRepository.findlistStockByLocationAndArticle(goodsReceiptPosRequest.getLocation_area(),goodsReceiptPosRequest.getLocation_bin(),goodsReceiptPosRequest.getLocation_place(),goodsReceiptPos.getArticle());
+           if (globalestock1 != null) {
+               globalestock.setOpeningQuantity(goodsReceiptPos.getQuantityBooked()+globalestock1.getOpeningQuantity());
+               globalestockRepository.save(globalestock);
+           }
+           else {
+               globalestock.setOpeningQuantity(goodsReceiptPos.getQuantityBooked());
+               globalestockRepository.save(globalestock);
+           }
+
             Mouvement mv = new Mouvement();
             mv.setDescription("Save createGoodsReceiptPos entity");
-            mv.setMouvement("Save createGoodsReceiptPos entity");
+            mv.setMouvement("Save createGoodsReceiptPos entity"+goodsReceiptPosRequest.getArticle());
             mv.setIdtransaction(idtr);
 
             mouvementService.SaveMouvement(mv);
 
-            manageAndSaveStock.saveStock(locationAreaStock.getArea(),"","",goodsReceiptPosRequest.getQuantityBooked(),orderStock.getArticel());
+            //manageAndSaveStock.saveStock(locationAreaStock.getArea(),"","",goodsReceiptPosRequest.getQuantityBooked(),orderStock.getArticel());
 
             CheckStatus(goodsReceipt.getId());
 
