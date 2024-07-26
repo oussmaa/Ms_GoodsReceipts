@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Supplier {
+@Inheritance(strategy = InheritanceType.JOINED) // or SINGLETABLE, TABLE_PER_CLASS
+public abstract class  Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

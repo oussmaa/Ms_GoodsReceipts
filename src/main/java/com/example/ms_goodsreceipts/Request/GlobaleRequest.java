@@ -17,10 +17,14 @@ public class GlobaleRequest {
 
     private Double QuantityUsed;
     private Article article;
+    private String articleID;
+    public Long id;
     private Long articleId;
     private Double OpeningQuantity;
     public LocationAreaStock locationAreaStock;
     private List<LocationAreaRequest> locationAreaRequests  = new ArrayList<>();
-
+    private String LocationArea;
+    private String LocationBin;
+    private String LocationPlace;
 
 }

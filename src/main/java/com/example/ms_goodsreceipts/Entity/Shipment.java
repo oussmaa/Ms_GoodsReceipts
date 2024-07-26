@@ -31,6 +31,9 @@ public class Shipment {
     private String receiptEmail;
     private String receiptName;
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "shipment")
+    private Customer customer;
+
 
 
 

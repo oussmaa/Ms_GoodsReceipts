@@ -17,7 +17,6 @@ public class Globalestock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //private Double QuantityUsed;
 
     @ManyToOne
     @JoinColumn(name = "article_id", nullable = false)

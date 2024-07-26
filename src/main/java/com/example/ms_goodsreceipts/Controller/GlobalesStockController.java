@@ -21,8 +21,8 @@ public class GlobalesStockController {
     private GlobalesStockService globalestockService;
 
     @GetMapping
-    public ResponseEntity<List<Globalestock>> getAllGlobalestocks() {
-        List<Globalestock> globalestocks = globalestockService.getAllGlobalestocks();
+    public ResponseEntity<List<GlobaleRequest>> getAllGlobalestocks() {
+        List<GlobaleRequest> globalestocks = globalestockService.getAllGlobalestocks();
         return ResponseEntity.ok(globalestocks);
     }
 
@@ -38,7 +38,7 @@ public class GlobalesStockController {
         return globalestock.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+   @PostMapping
     public ResponseEntity<Globalestock> createGlobalestock(@RequestBody GlobaleRequest globalestock) {
         return  globalestockService.createGlobalestock(globalestock);
     }
