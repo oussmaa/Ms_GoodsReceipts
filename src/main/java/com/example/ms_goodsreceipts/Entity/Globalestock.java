@@ -25,6 +25,8 @@ public class Globalestock {
 
     private Double OpeningQuantity;
 
+    private Double ReservedStock=0.0;
+
     private LocalDateTime creationDate;
 
     @PrePersist

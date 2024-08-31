@@ -28,15 +28,15 @@ public class OrdersController {
 
     @PostMapping("/picking/genratepicking/{id}")
     public ResponseEntity<String> generatepicking(@PathVariable Long id) {
-            String order = orderService.generatepicking(id);
-        return ResponseEntity.ok(order);
+        return  orderService.generatepicking(id);
+
     }
 
 
         @PostMapping("/position/addposition")
-        public ResponseEntity<OrderPosition> addOrderPosition(@RequestBody OrderPositionRequest orderPositionDto) {
-            OrderPosition position = orderService.addOrderPosition(orderPositionDto);
-            return ResponseEntity.ok(position);
+        public ResponseEntity<String> addOrderPosition(@RequestBody OrderPositionRequest orderPositionDto) {
+            return  orderService.addOrderPosition(orderPositionDto);
+
         }
 
         @PutMapping("/updateorder")

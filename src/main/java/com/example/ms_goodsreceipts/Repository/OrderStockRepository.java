@@ -12,4 +12,6 @@ public interface OrderStockRepository extends JpaRepository<OrderStock, Long> {
 
         @Query("select lk from  OrderStock lk where  lk.goodsReceipt.id=:id")
         OrderStock findArticlebyorderofstock(Long id);
+
+
 }

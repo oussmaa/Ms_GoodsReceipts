@@ -29,6 +29,12 @@ public class Picking {
     @JsonBackReference
     private Orders orders;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shipment_id")
+    @JsonBackReference
+    private Shipment shipment;
 
+
+    private Boolean GoShipmment = false;
 
 }

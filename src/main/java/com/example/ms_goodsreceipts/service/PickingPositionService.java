@@ -54,7 +54,7 @@ public List<PickingPosition> GetALLPositionById(long id)
                 Globalestock globalestock1=  globalestockRepository.findlistStockByLocationAndArticle(pickingPosition.getLocationArea(),pickingPosition.getLocationBin(),pickingPosition.getLocationPlace(),pickingPosition.getArticle());
 
                 if (globalestock1 != null) {
-                    globalestock.setOpeningQuantity(globalestock1.getOpeningQuantity()-quantityBooked);
+                    globalestock.setOpeningQuantity(globalestock1.getReservedStock()-quantityBooked);
                     globalestockRepository.save(globalestock);
                 }
                 return new ResponseEntity<>("The Quantity Booked ", HttpStatus.OK);
@@ -71,7 +71,7 @@ public List<PickingPosition> GetALLPositionById(long id)
                 Globalestock globalestock1=  globalestockRepository.findlistStockByLocationAndArticle(pickingPosition.getLocationArea(),pickingPosition.getLocationBin(),pickingPosition.getLocationPlace(),pickingPosition.getArticle());
 
                 if (globalestock1 != null) {
-                    globalestock1.setOpeningQuantity(globalestock1.getOpeningQuantity()-quantityBooked);
+                    globalestock1.setOpeningQuantity(globalestock1.getReservedStock()-quantityBooked);
                     globalestockRepository.save(globalestock1);
                 }
 

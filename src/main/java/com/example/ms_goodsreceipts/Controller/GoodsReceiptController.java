@@ -20,8 +20,8 @@ public class GoodsReceiptController {
 
     @PostMapping
     public ResponseEntity<String> createGoodsReceipt(@RequestBody GoodsReceiptRequest goodsReceiptRequest) {
-        String createdGoodsReceipt = goodsReceiptService.createGoodsReceipt(goodsReceiptRequest);
-            return new ResponseEntity<>(createdGoodsReceipt, HttpStatus.OK);
+        return  goodsReceiptService.createGoodsReceipt(goodsReceiptRequest);
+
     }
 
     @GetMapping("/{id}")

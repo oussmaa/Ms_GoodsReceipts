@@ -10,6 +10,8 @@ import com.example.ms_goodsreceipts.Repository.GoodsReceiptRepository;
 import com.example.ms_goodsreceipts.Repository.OrderStockRepository;
 import com.example.ms_goodsreceipts.Request.GoodsReceiptRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +35,7 @@ public class GoodsReceiptService {
 
 
     @Transactional
-    public String createGoodsReceipt(GoodsReceiptRequest goodsReceiptCreateDTO) {
+    public ResponseEntity<String> createGoodsReceipt(GoodsReceiptRequest goodsReceiptCreateDTO) {
         GoodsReceipt goodsReceipt = new GoodsReceipt();
         goodsReceipt.setDescription(goodsReceiptCreateDTO.getDescription());
 
@@ -43,8 +45,10 @@ public class GoodsReceiptService {
         GoodsReceipt goodsReceipt2=  goodsReceiptRepository.findGoodsReceiptByOrderStockID(goodsReceiptCreateDTO.getOrderStockId());
 
         if (goodsReceipt2 == null) {
+
             goodsReceipt.setOrderStock(orderStock);
             goodsReceipt.setQuantityUsed(orderStock.getQuantityNeeded());
+            goodsReceipt.setStatus("INPROGRESS");
             long idtr = goodsReceiptRepository.save(goodsReceipt).getId();
 
             Mouvement mv = new Mouvement();
@@ -53,11 +57,12 @@ public class GoodsReceiptService {
             mv.setIdtransaction(idtr);
 
             mouvementService.SaveMouvement(mv);
+            return new ResponseEntity<>("Goods Receipt Is Created ", HttpStatus.OK);
 
-             return  "Goods Receipt Is Created ";
         }
 
-          return "the order is saved with another Goods Receipt";
+        return new ResponseEntity<>("the order is saved with another Goods Receipt", HttpStatus.BAD_REQUEST);
+
 
     }
 
@@ -72,7 +77,6 @@ public class GoodsReceiptService {
     @Transactional(readOnly = true)
     public List<GoodsReceipt> getAllGoodsReceipts() {
         return goodsReceiptRepository.findAll().stream()
-                .filter(gr -> !"Close".equalsIgnoreCase(gr.getStatus())) // Filter out goods receipts with status "Close"
                 .peek(gr -> {
                     if (gr.getOrderStock() != null) {
                         gr.setOrderStockId(gr.getOrderStock().getId()); // Set the orderStockId if orderStock is not null

@@ -45,6 +45,7 @@ public class GlobalesStockService {
                 globaleRequest.setLocationPlace(item.getLocationPlace());
                 globaleRequest.setLocationBin(item.getLocationBin());
                 globaleRequest.setLocationArea(item.getLocationArea());
+                globaleRequest.setReservedStock(item.getReservedStock());
                 globaleRequest.setId(item.getId());
                 globaleRequestMap.put(key, globaleRequest);
             }
@@ -89,6 +90,8 @@ public class GlobalesStockService {
             if(globalestock1!=null)
             {
                 globalestock1.setOpeningQuantity(globalestock1.getOpeningQuantity()+globaleRequest.getOpeningQuantity());
+                if(globalestock1.getReservedStock()==null)
+
                 return ResponseEntity.ok(globalestock1);
             }
             else

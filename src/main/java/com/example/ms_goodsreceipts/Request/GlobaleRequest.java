@@ -26,5 +26,6 @@ public class GlobaleRequest {
     private String LocationArea;
     private String LocationBin;
     private String LocationPlace;
+    private Double reservedStock;
 
 }

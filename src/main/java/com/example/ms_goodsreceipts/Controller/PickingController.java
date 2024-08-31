@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/picking")
@@ -33,7 +34,16 @@ public class PickingController {
         List<Picking> positions = pickingService.getAllPickings();
         return ResponseEntity.ok(positions);
     }
+    @GetMapping("/getallpickingClosed")
+    public ResponseEntity<List<Picking>> getAllPickingClosed() {
 
+        List<Picking> positions = pickingService.getAllPickings()
+                .stream()
+                .filter(picking -> Boolean.FALSE.equals(picking.getGoShipmment())) // Keep only those with goshippment false
+                .collect(Collectors.toList()); // Collect the filtered results into a list
+
+        return ResponseEntity.ok(positions);
+    }
     @PostMapping("/position/bookposition/{id}")
     public ResponseEntity<String> bookPosition(@PathVariable Long id ,@RequestBody Double quantitybooked) {
 

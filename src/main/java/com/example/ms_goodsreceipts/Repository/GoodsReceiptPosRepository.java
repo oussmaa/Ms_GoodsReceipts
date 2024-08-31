@@ -15,4 +15,5 @@ public interface GoodsReceiptPosRepository extends JpaRepository<GoodsReceiptPos
 
      @Query("select gp from GoodsReceiptPos gp where gp.goodsReceipt.id=:id")
      List<GoodsReceiptPos> findlistPositionbyIdGoods(Long id);
+
 }

@@ -19,9 +19,8 @@ public class GoodsReceiptPosController {
 
     @PostMapping
     public ResponseEntity<String> createGoodsReceiptPos(@RequestBody GoodsReceiptPosRequest GoodsReceiptPosRequest) {
-        String goodsReceiptPos = goodsReceiptPosService.createGoodsReceiptPos(GoodsReceiptPosRequest);
-        return new ResponseEntity<>(goodsReceiptPos, HttpStatus.CREATED);
-    }
+        return  goodsReceiptPosService.createGoodsReceiptPos(GoodsReceiptPosRequest);
+     }
 
     @GetMapping("/{id}")
     public ResponseEntity<List<GoodsReceiptPos>> getGoodsReceiptPosById(@PathVariable Long id) {

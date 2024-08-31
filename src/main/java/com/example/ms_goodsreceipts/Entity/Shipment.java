@@ -15,9 +15,10 @@ public class Shipment {
     private Long id;
 
 
-    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<PickingPosition> pickingPositions;
+    private List<Picking> pickings;
+
 
 
     private String receiptDate;
@@ -32,6 +33,7 @@ public class Shipment {
     private String receiptName;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "shipment")
+    @JsonManagedReference
     private Customer customer;
 
 

@@ -1,20 +1,17 @@
 package com.example.ms_goodsreceipts.service;
 
-import com.example.ms_goodsreceipts.Entity.OrderPosition;
-import com.example.ms_goodsreceipts.Entity.Orders;
-import com.example.ms_goodsreceipts.Entity.Picking;
-import com.example.ms_goodsreceipts.Entity.PickingPosition;
-import com.example.ms_goodsreceipts.Repository.OrderPositionRepository;
-import com.example.ms_goodsreceipts.Repository.OrdersRepository;
-import com.example.ms_goodsreceipts.Repository.PickingPositionRepository;
-import com.example.ms_goodsreceipts.Repository.PickingRepository;
+import com.example.ms_goodsreceipts.Entity.*;
+import com.example.ms_goodsreceipts.Repository.*;
 import com.example.ms_goodsreceipts.Request.OrderPositionRequest;
 import com.example.ms_goodsreceipts.Request.OrderRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderGenrateService {
@@ -23,10 +20,16 @@ public class OrderGenrateService {
     public OrdersRepository  ordersRepository;
 
     @Autowired
+    public GlobalestockRepository globalestockRepository;
+
+    @Autowired
     public PickingPositionRepository pickingPositionRepository;
 
     @Autowired
     public PickingRepository pickingRepository;
+
+    @Autowired
+    public CustomerRepository customerRepository;
 
 
     @Autowired
@@ -38,19 +41,34 @@ public class OrderGenrateService {
         order.setDescription(orderDto.getDescription());
         order.setStatus("INPROGRESS");
         order.setGoPicking(false);
+        order.setType(orderDto.getType());
+
+        Customer customer = customerRepository.findById((Long.parseLong(orderDto.getIdcustomer()))).orElseThrow();
+        order.setCustomer(customer);
         return ordersRepository.save(order);
     }
 
 
 
     @Transactional
-    public String generatepicking(Long orderId) {
+    public ResponseEntity<String> generatepicking(Long orderId) {
         try {
 
             Orders order = ordersRepository.findById(orderId)
                     .orElseThrow(() -> new RuntimeException("Order not found"));
-            if(order.getGoPicking()) {
-                return "Order Is Genrated to Picking";
+            if(order.getGoPicking() ) {
+                 return new ResponseEntity<>("Order Is Genrated to Picking", HttpStatus.BAD_REQUEST);
+
+            }
+            else if(order.getOrderPositions().isEmpty())
+            {
+                return new ResponseEntity<>("This order has no Position", HttpStatus.BAD_REQUEST);
+
+            }
+            else if(order.getStatus() == "CLOSED")
+            {
+                return new ResponseEntity<>("This order is CLOSED", HttpStatus.BAD_REQUEST);
+
             }
             else {
 
@@ -81,33 +99,55 @@ public class OrderGenrateService {
 
 
             }
+
             order.setGoPicking(true);
-            return "Picking Genrated successfully for this Order: "+order.getId();
+            order.setStatus("CLOSED");
+            return new ResponseEntity<>("Picking Genrated successfully for this Order", HttpStatus.OK);
 
             }
         }catch (Exception e)
         {
-            return e.getMessage();
+
+            return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
 
 
     }
 
     @Transactional
-    public OrderPosition addOrderPosition(OrderPositionRequest orderPositionDto) {
+    public ResponseEntity<String> addOrderPosition(OrderPositionRequest orderPositionDto) {
+
         Orders order = ordersRepository.findById(orderPositionDto.getOrderId())
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        OrderPosition position = new OrderPosition();
-        position.setArticle(orderPositionDto.getArticel());
-        position.setDescription(orderPositionDto.getDescription());
-        position.setQuantity(orderPositionDto.getQuantity());
-        position.setLocationArea(orderPositionDto.getLocationArea());
-        position.setLocationBin(orderPositionDto.getLocationBin());
-        position.setLocationPlace(orderPositionDto.getLocationPlace());
-        position.setArticle(orderPositionDto.getArticel());
-        position.setOrders(order);
-        return orderPositionRepository.save(position);
+
+        Globalestock globalestock = globalestockRepository.findlistStockByLocationAndArticle(orderPositionDto.getLocationArea(), orderPositionDto.getLocationBin(), orderPositionDto.getLocationPlace(), orderPositionDto.getArticle());
+
+        if(globalestock !=null && globalestock.getOpeningQuantity() >= orderPositionDto.getQuantity() && "INPROGRESS".equals(order.getStatus())) {
+
+            OrderPosition position = new OrderPosition();
+            position.setArticle(orderPositionDto.getArticle());
+            position.setDescription(orderPositionDto.getDescription());
+            position.setQuantity(orderPositionDto.getQuantity());
+            position.setLocationArea(orderPositionDto.getLocationArea());
+            position.setLocationBin(orderPositionDto.getLocationBin());
+            position.setLocationPlace(orderPositionDto.getLocationPlace());
+            position.setOrders(order);
+            orderPositionRepository.save(position);
+            globalestock.setReservedStock(globalestock.getReservedStock()+orderPositionDto.getQuantity());
+            globalestock.setOpeningQuantity(Math.abs(globalestock.getOpeningQuantity()-orderPositionDto.getQuantity()));
+            globalestockRepository.save(globalestock);
+            return new ResponseEntity<>("The position was crated and the quantity was reserved", HttpStatus.OK);
+
+        }
+
+        else
+        {
+            return new ResponseEntity<>("No Valid  quantity in this Location Or order is CLOSED ", HttpStatus.BAD_REQUEST);
+
+        }
+
     }
 
     @Transactional
@@ -125,7 +165,7 @@ public class OrderGenrateService {
         OrderPosition position = orderPositionRepository.findById(orderPositionDto.getId())
                 .orElseThrow(() -> new RuntimeException("Order position not found"));
 
-        position.setArticle(orderPositionDto.getArticel());
+        position.setArticle(orderPositionDto.getArticle());
         position.setDescription(orderPositionDto.getDescription());
         position.setQuantity(orderPositionDto.getQuantity());
         return orderPositionRepository.save(position);

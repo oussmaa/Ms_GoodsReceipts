@@ -8,5 +8,7 @@ public class OrderRequest {
 
     private String description;
     private String status;
+    private String idcustomer;
+    private String type;
 
 }

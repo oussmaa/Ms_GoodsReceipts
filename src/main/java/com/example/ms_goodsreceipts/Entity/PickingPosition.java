@@ -30,9 +30,6 @@ public class PickingPosition {
 
     private String Article;
 
-    @ManyToOne
-    @JoinColumn(name = "shipment_id")
-    @JsonBackReference
-    private Shipment shipment;
+
 
 }
